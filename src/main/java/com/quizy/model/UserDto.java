@@ -1,30 +1,12 @@
 package com.quizy.model;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDto {
     private Integer id;
-
-    @Column(name = "name")
     private String name;
-
-    @Column(name = "email")
     private String email;
-
-    @Column(name = "password")
     private String password;
-
-    @Column(name = "country")
     private String country;
-
-    @Column(name = "points")
     private Integer points;
-
-    @Column(name = "is_admin")
     private Boolean isAdmin;
 
     public void setId(Integer id) {
