@@ -13,7 +13,7 @@
         	&nbsp;&nbsp;&nbsp;
         	<a href="UserServlet">List All Users</a>
         	&nbsp;&nbsp;&nbsp;
-			<a href="ProfileServlet"> Main Page</a>
+			<a href="Profile"> Main Page</a>
         </h2>
 	</center>
     <div align="center">

@@ -11,5 +11,6 @@
 <a href="/Account">account</a><br>
 <a href="/UserServlet">user-management</a><br>
 <a href="/QuizCreator">quiz-creator</a><br>
+<a href="/QuizList">quiz-list</a><br>
 </body>
 </html>

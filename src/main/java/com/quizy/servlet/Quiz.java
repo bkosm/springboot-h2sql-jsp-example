@@ -8,36 +8,33 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/QuizList")
-public class QuizList {
+@RequestMapping("/Quiz")
+public class Quiz {
     private ModelMapper modelMapper;
     private QuizRepository quizRepository;
 
-    public QuizList(ModelMapper modelMapper,
-                    QuizRepository quizRepository) {
+    public Quiz(ModelMapper modelMapper,
+                QuizRepository quizRepository) {
         this.modelMapper = modelMapper;
         this.quizRepository = quizRepository;
     }
 
     @GetMapping
-    public ModelAndView get(HttpSession session, Model model) {
+    public ModelAndView get(@RequestParam Integer id, HttpSession session, Model model) {
         var user = (UserDto) session.getAttribute("user");
         if (user == null) {
             return new ModelAndView("redirect:/Login");
         }
 
-        var quizes = quizRepository.findAll()
-                .stream()
-                .map(q -> modelMapper.map(q, QuizDto.class))
-                .collect(Collectors.toList());
+        var quiz = quizRepository.findById(id).orElseThrow();
 
-        model.addAttribute("quizes", quizes);
-        return new ModelAndView("quiz-list");
+        model.addAttribute("quiz", modelMapper.map(quiz, QuizDto.class));
+        return new ModelAndView("quiz-fill");
     }
 }
