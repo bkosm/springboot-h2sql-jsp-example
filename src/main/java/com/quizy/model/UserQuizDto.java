@@ -8,7 +8,7 @@ public class UserQuizDto {
     private String name;
     private String definition;
 
-    private int userId;
+    private Integer userId;
     private List<UserQuestionDto> questionDtos;
 
     public String getDefinition() {

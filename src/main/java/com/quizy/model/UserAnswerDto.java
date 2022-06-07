@@ -6,7 +6,33 @@ public class UserAnswerDto {
     private Boolean isCorrect;
 
     private Integer userId;
+    private Integer answerId; // do relacji odpowiedzi użytkownika
+    private Integer id; // stare id z klasy odpowiedzi
     private Boolean userSelection;
+
+    public Integer getAnswerId() {
+        return answerId;
+    }
+
+    public void setAnswerId(Integer answerId) {
+        this.answerId = answerId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Boolean getUserSelection() {
         return userSelection;

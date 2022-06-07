@@ -1,3 +1,4 @@
+<%@ page import="com.quizy.model.QuizDto" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -17,13 +18,14 @@
             <tr>
                 <th>Question ${status.index + 1}:</th>
                 <td><c:out value="${question.description}"/>
-                <ul>
-                    <c:forEach items="${question.answers}" var="answer" varStatus="answerStatus">
-                        <li>
-                            <input type="checkbox">${answer.text}
-                        </li>
-                    </c:forEach>
-                </ul>
+                    <ul>
+                        <c:forEach items="${question.answers}" var="answer" varStatus="answerStatus">
+                            <li>
+                                <form:checkbox
+                                        path="questions[${status.index}].answers[${answerStatus.index}].userSelection"/>${answer.text}
+                            </li>
+                        </c:forEach>
+                    </ul>
                 </td>
             </tr>
         </c:forEach>
