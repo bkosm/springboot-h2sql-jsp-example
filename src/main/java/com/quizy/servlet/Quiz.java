@@ -5,6 +5,7 @@ import com.quizy.model.UserDto;
 import com.quizy.model.UserQuizDto;
 import com.quizy.repo.QuizRepository;
 import com.quizy.repo.UserAnswerRepository;
+import com.quizy.repo.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,13 +21,17 @@ public class Quiz {
     private ModelMapper modelMapper;
     private QuizRepository quizRepository;
     private UserAnswerRepository userAnswerRepository;
+    private UserRepository userRepository;
 
     public Quiz(ModelMapper modelMapper,
                 QuizRepository quizRepository,
-                UserAnswerRepository userAnswerRepository) {
+                UserAnswerRepository userAnswerRepository,
+                UserRepository userRepository
+    ) {
         this.modelMapper = modelMapper;
         this.quizRepository = quizRepository;
         this.userAnswerRepository = userAnswerRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -67,6 +72,7 @@ public class Quiz {
             }
         }
 
+        var answers = userRepository.findUserAnswersForUserAndQuiz(savedQuiz.getUserId(), savedQuiz.getId());
 
 
         return new ModelAndView("redirect:/QuizList");
