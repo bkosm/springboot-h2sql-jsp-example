@@ -42,6 +42,17 @@ public class Quiz {
         }
 
         var quiz = quizRepository.findById(id).orElseThrow();
+
+        for (var q : quiz.getQuestions()) {
+            for (var a : q.getAnswers()) {
+                for (var ua : a.getUserAnswers()) {
+                    if (user.getId().equals(ua.getUser().getId())) {
+                        return new ModelAndView("quiz-completed");
+                    }
+                }
+            }
+        }
+
         var quizToFill = modelMapper.map(quiz, UserQuizDto.class);
 
         session.setAttribute("savedQuiz", quizToFill);
