@@ -1,5 +1,6 @@
 package com.quizy.servlet;
 
+import com.quizy.hub.PointsCalculator;
 import com.quizy.model.UserAnswer;
 import com.quizy.model.UserDto;
 import com.quizy.model.UserQuizDto;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/Quiz")
@@ -68,7 +68,6 @@ public class Quiz {
             return new ModelAndView("redirect:/Login");
         }
 
-        var answerList = new ArrayList<UserAnswer>();
         for (int i = 0; i < savedQuiz.getQuestions().size(); i++) {
             var q = savedQuiz.getQuestions().get(i);
 
@@ -78,13 +77,17 @@ public class Quiz {
                 userAnswer.setUserId(savedQuiz.getUserId());
                 userAnswer.setAnswerId(a.getId());
                 var entity = modelMapper.map(userAnswer, UserAnswer.class);
-                answerList.add(entity);
                 userAnswerRepository.save(entity);
             }
         }
 
+        var userEntity = userRepository.findById(savedQuiz.getUserId()).orElseThrow();
         var answers = userRepository.findUserAnswersForUserAndQuiz(savedQuiz.getUserId(), savedQuiz.getId());
+        //var answers = userEntity.getUserAnswers().stream()         .filter(userAnswer -> userAnswer.getAnswer().getQuestion().getQuiz().getId().equals(savedQuiz.getId())).collect(Collectors.toList());
 
+        var points = PointsCalculator.getPoints(answers);
+        userEntity.setPoints(userEntity.getPoints() + points);
+        userRepository.save(userEntity);
 
         return new ModelAndView("redirect:/QuizList");
     }

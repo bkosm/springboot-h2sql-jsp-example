@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findByName(String name);
-    @Query("SELECT ua FROM User u JOIN u.userAnswers ua WHERE u.id = ?1 AND ua.answer.question.quiz.id = ?2")
+    @Query("SELECT ua FROM UserAnswer ua JOIN FETCH ua.answer WHERE ua.user.id = ?1 AND ua.answer.question.quiz.id = ?2")
     List<UserAnswer> findUserAnswersForUserAndQuiz(Integer userId, Integer quizId);
 }
