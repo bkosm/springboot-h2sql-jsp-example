@@ -1,6 +1,7 @@
 package com.quizy.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +27,28 @@ public class User {
 
     @Column(name = "is_admin")
     private Boolean isAdmin;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserAnswer> userAnswers;
+
+    @OneToMany(mappedBy = "user")
+    private List<Quiz> quizzes;
+
+    public List<UserAnswer> getUserAnswers() {
+        return userAnswers;
+    }
+
+    public void setUserAnswers(List<UserAnswer> userAnswers) {
+        this.userAnswers = userAnswers;
+    }
+
+    public List<Quiz> getQuizzes() {
+        return quizzes;
+    }
+
+    public void setQuizzes(List<Quiz> quizzes) {
+        this.quizzes = quizzes;
+    }
 
     public void setId(Integer id) {
         this.id = id;

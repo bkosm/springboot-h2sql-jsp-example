@@ -3,10 +3,12 @@ package com.quizy.servlet;
 import com.quizy.hub.QuizParser;
 import com.quizy.model.Quiz;
 import com.quizy.model.QuizDto;
+import com.quizy.model.User;
 import com.quizy.model.UserDto;
 import com.quizy.repo.AnswerRepository;
 import com.quizy.repo.QuestionRepository;
 import com.quizy.repo.QuizRepository;
+import com.quizy.repo.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,14 +26,17 @@ public class QuizCreator {
     private ModelMapper modelMapper;
     private QuizRepository quizRepository;
     private QuestionRepository questionRepository;
+    private UserRepository userRepository;
     private AnswerRepository answerRepository;
 
     public QuizCreator(ModelMapper modelMapper,
                        QuizRepository quizRepository,
+                       UserRepository userRepository,
                        QuestionRepository questionRepository,
                        AnswerRepository answerRepository) {
         this.modelMapper = modelMapper;
         this.quizRepository = quizRepository;
+        this.userRepository = userRepository;
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
     }
@@ -56,13 +61,15 @@ public class QuizCreator {
 
         var parsed = QuizParser.parse(quizDto);
         parsed.setUserId(user.getId());
-        convertAndSaveDatabaseEntity(parsed);
+        var userEntity = userRepository.findById(user.getId()).orElseThrow();
+        convertAndSaveDatabaseEntity(parsed, userEntity);
 
         return new ModelAndView("redirect:/QuizList");
     }
 
-    private void convertAndSaveDatabaseEntity(QuizDto dto) {
+    private void convertAndSaveDatabaseEntity(QuizDto dto, User userEntity) {
         var quiz = modelMapper.map(dto, Quiz.class);
+        quiz.setUser(userEntity);
         var savedQuiz = quizRepository.save(quiz);
 
         quiz.getQuestions().forEach(q -> {

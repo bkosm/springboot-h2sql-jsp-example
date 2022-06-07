@@ -2,6 +2,7 @@ package com.quizy.model;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "answer")
@@ -19,6 +20,17 @@ public class Answer {
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
+
+    @OneToMany(mappedBy = "answer")
+    private List<UserAnswer> userAnswers;
+
+    public List<UserAnswer> getUserAnswers() {
+        return userAnswers;
+    }
+
+    public void setUserAnswers(List<UserAnswer> userAnswers) {
+        this.userAnswers = userAnswers;
+    }
 
     public Integer getId() {
         return id;

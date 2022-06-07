@@ -17,11 +17,20 @@ public class Quiz {
     @Column(name = "definition")
     private String definition;
 
-    @Column(name = "userId")
-    private Integer userId;
-
     @OneToMany(mappedBy="quiz")
     private List<Question> questions;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Integer getId() {
         return id;
@@ -45,14 +54,6 @@ public class Quiz {
 
     public void setDefinition(String definition) {
         this.definition = definition;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public List<Question> getQuestions() {

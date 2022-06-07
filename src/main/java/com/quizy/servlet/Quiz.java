@@ -33,8 +33,9 @@ public class Quiz {
         }
 
         var quiz = quizRepository.findById(id).orElseThrow();
+        var quizDto = modelMapper.map(quiz, QuizDto.class);
 
-        model.addAttribute("quiz", modelMapper.map(quiz, QuizDto.class));
+        model.addAttribute("quiz", quizDto);
         return new ModelAndView("quiz-fill");
     }
 }
