@@ -4,6 +4,7 @@ import com.quizy.hub.PointsCalculator;
 import com.quizy.model.UserAnswer;
 import com.quizy.model.UserDto;
 import com.quizy.model.UserQuizDto;
+import com.quizy.repo.AnswerRepository;
 import com.quizy.repo.QuizRepository;
 import com.quizy.repo.UserAnswerRepository;
 import com.quizy.repo.UserRepository;
@@ -21,17 +22,20 @@ public class Quiz {
     private ModelMapper modelMapper;
     private QuizRepository quizRepository;
     private UserAnswerRepository userAnswerRepository;
+    private AnswerRepository answerRepository;
     private UserRepository userRepository;
 
     public Quiz(ModelMapper modelMapper,
                 QuizRepository quizRepository,
                 UserAnswerRepository userAnswerRepository,
+                AnswerRepository answerRepository,
                 UserRepository userRepository
     ) {
         this.modelMapper = modelMapper;
         this.quizRepository = quizRepository;
         this.userAnswerRepository = userAnswerRepository;
         this.userRepository = userRepository;
+        this.answerRepository = answerRepository;
     }
 
     @GetMapping
@@ -82,8 +86,12 @@ public class Quiz {
         }
 
         var userEntity = userRepository.findById(savedQuiz.getUserId()).orElseThrow();
-        var answers = userRepository.findUserAnswersForUserAndQuiz(savedQuiz.getUserId(), savedQuiz.getId());
-        //var answers = userEntity.getUserAnswers().stream()         .filter(userAnswer -> userAnswer.getAnswer().getQuestion().getQuiz().getId().equals(savedQuiz.getId())).collect(Collectors.toList());
+        var answers = userAnswerRepository.findUserAnswersForUserAndQuiz(savedQuiz.getUserId(), savedQuiz.getId());
+        answers.forEach(ua -> {
+            var id = ua.getAnswer().getId();
+            var a = answerRepository.findById(id).orElseThrow();
+            ua.setAnswer(a);
+        });
 
         var points = PointsCalculator.getPoints(answers);
         userEntity.setPoints(userEntity.getPoints() + points);
