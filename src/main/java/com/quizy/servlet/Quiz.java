@@ -66,9 +66,9 @@ public class Quiz {
 
     @PostMapping
     public ModelAndView post(@ModelAttribute("quiz") UserQuizDto quizDto, HttpSession session) {
-        var user = (UserDto) session.getAttribute("user");
+        var loggedUser = (UserDto) session.getAttribute("user");
         var savedQuiz = (UserQuizDto) session.getAttribute("savedQuiz");
-        if (user == null || savedQuiz == null) {
+        if (loggedUser == null || savedQuiz == null) {
             return new ModelAndView("redirect:/Login");
         }
 
@@ -78,15 +78,15 @@ public class Quiz {
             for (int j = 0; j < q.getAnswers().size(); j++) {
                 var a = q.getAnswers().get(j);
                 var userAnswer = quizDto.getQuestions().get(i).getAnswers().get(j);
-                userAnswer.setUserId(savedQuiz.getUserId());
+                userAnswer.setUserId(loggedUser.getId());
                 userAnswer.setAnswerId(a.getId());
                 var entity = modelMapper.map(userAnswer, UserAnswer.class);
                 userAnswerRepository.save(entity);
             }
         }
 
-        var userEntity = userRepository.findById(savedQuiz.getUserId()).orElseThrow();
-        var answers = userAnswerRepository.findUserAnswersForUserAndQuiz(savedQuiz.getUserId(), savedQuiz.getId());
+        var userEntity = userRepository.findById(loggedUser.getId()).orElseThrow();
+        var answers = userAnswerRepository.findUserAnswersForUserAndQuiz(loggedUser.getId(), savedQuiz.getId());
         answers.forEach(ua -> {
             var id = ua.getAnswer().getId();
             var a = answerRepository.findById(id).orElseThrow();
