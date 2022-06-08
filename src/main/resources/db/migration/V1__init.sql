@@ -10,4 +10,4 @@ CREATE TABLE users
 );
 
 INSERT INTO users (name, email, country, points, password, is_admin)
-VALUES ('bart', 'bart@bart.pl', 'pl', 0, 'bart', true);
+VALUES ('wap', 'wap@wap.pl', 'pl', 0, 'wap', true);
