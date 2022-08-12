@@ -1,9 +1,17 @@
-# Quizy 
+# Spring boot with Java Servlet pages frontend & sql database template application 
 
-Po każdej zmianie w bazie i przy pierwszym odpalaniu trzeba zrobić:
+After each new migration file and on first run execute:
 
-`./gradlew.bat flywayMigrate`
+```bash
+./gradlew.bat flywayMigrate
+```
 
-Do odpalenia aplikacji wystarczy:
+To run the application just:
 
-`./gradlew.bat bootRun`
+```bash
+./gradlew.bat bootRun
+```
+
+---
+
+Useful for obsolete University courses :)
